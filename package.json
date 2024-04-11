@@ -2,7 +2,7 @@
   "name": "rspec-file-generator",
   "displayName": "Rspec File Generator",
   "description": "Automatically generate RSpec test files for Ruby on Rails applications with a simple right-click.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.82.2"
   },
@@ -17,10 +17,18 @@
       "title": "Generate RSpec File"
     }],
     "menus": {
+      "editor/context": [
+        {
+        "when": "editorLangId == ruby",
+        "command": "extension.generateRSpec",
+        "group": "navigation",
+        "order": 1000
+      }],
       "explorer/context": [{
         "when": "resourceLangId == ruby",
         "command": "extension.generateRSpec",
-        "group": "navigation"
+        "group": "navigation",
+        "order": 1000
       }]
     }
   },
