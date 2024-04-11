@@ -30,7 +30,7 @@
       "email": "dezsirazvan@gmail.com"
     }
   ],
-  "publisher": "Razvan Dezsi",
+  "publisher": "RazvanDezsi",
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
