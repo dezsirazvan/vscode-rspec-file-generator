@@ -4,7 +4,7 @@
   "description": "Automatically generate RSpec test files for Ruby on Rails applications with a simple right-click.",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.88.0"
+    "vscode": "^1.82.2"
   },
   "categories": [
     "Other"
