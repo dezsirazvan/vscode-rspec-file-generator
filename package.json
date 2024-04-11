@@ -12,13 +12,24 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "rspec-file-generator.helloWorld",
-        "title": "Hello World"
-      }
-    ]
+    "commands": [{
+      "command": "extension.generateRSpec",
+      "title": "Generate RSpec File"
+    }],
+    "menus": {
+      "explorer/context": [{
+        "when": "resourceLangId == ruby",
+        "command": "extension.generateRSpec",
+        "group": "navigation"
+      }]
+    }
   },
+  "contributors": [
+    {
+      "name": "Razvan Dezsi",
+      "email": "dezsirazvan@gmail.com"
+    }
+  ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
