@@ -7,11 +7,12 @@ import * as fs from 'fs';
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
+	console.log('Extension has been activated');
+
 	let disposable = vscode.commands.registerCommand('extension.generateRSpec', (uri: vscode.Uri) => {
 		const filePath = uri.fsPath;
 		const fileName = path.basename(filePath);
 		const dirName = path.dirname(filePath);
-	
 		// Assuming the code files are in 'app' and specs should be in 'spec'
 		const specDir = dirName.replace('/app/', '/spec/');
 		const specFileName = fileName.replace('.rb', '_spec.rb');
