@@ -14,8 +14,6 @@ For example, here's how you can use the extension in action:
 
 ![Generate RSpec File](images/feature-x.png)
 
-> Tip: Consider using short animations to demonstrate the extension's functionality. This visual aid can significantly enhance user understanding and engagement.
-
 ## Requirements
 
 This extension requires:
