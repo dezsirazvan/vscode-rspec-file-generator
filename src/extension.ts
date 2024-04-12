@@ -30,36 +30,62 @@ export function activate(context: vscode.ExtensionContext) {
         } else if (filePath.includes('/app/services/')) {
             specDir = dirName.replace('/app/services', '/spec/services');
             specFileName = fileName.replace('.rb', '_spec.rb');
-            testType = '';
         } else if (filePath.includes('/app/models/')) {
-            specDir = dirName.replace('/app/', '/spec/');
+            specDir = dirName.replace('/app/models', '/spec/models');
             specFileName = fileName.replace('.rb', '_spec.rb');
             testType = 'type: :model';
+        } else if (filePath.includes('/app/graphql/')) {
+            handleGraphqlSpecs(filePath, dirName, fileName);
+            return; // Early return to prevent further processing
         } else {
             specDir = dirName.replace('/app/', '/spec/');
             specFileName = fileName.replace('.rb', '_spec.rb');
-            testType = '';
-        };
-
-        specFilePath = path.join(specDir, specFileName);
-
-        if (!fs.existsSync(specDir)) {
-            fs.mkdirSync(specDir, { recursive: true });
         }
 
-        if (!fs.existsSync(specFilePath)) {
-            const fileContents = fs.readFileSync(filePath, 'utf8');
-            const fullClassName = getFullClassName(fileContents);
-            const describeBlock = fullClassName || fileName.replace('.rb', '');
-
-            fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock}, ${testType ? `${testType} ` : ''}do\nend`);
-            vscode.window.showInformationMessage(`RSpec file created: ${specFilePath}`);
-        } else {
-            vscode.window.showInformationMessage('RSpec file already exists.');
-        }
+        generateSpecFile(specDir, specFileName, filePath, testType);
     });
 
     context.subscriptions.push(disposable);
+}
+
+function handleGraphqlSpecs(filePath: string, dirName: string, fileName: string) {
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const fullClassName = getFullClassName(fileContents);
+    const baseName = fullClassName || fileName.replace('.rb', '');
+
+    // Unit test for the GraphQL resolver
+    const resolverSpecDir = dirName.replace('/app/graphql', '/spec/graphql');
+    const resolverSpecFileName = fileName.replace('.rb', '_spec.rb');
+    const resolverSpecPath = path.join(resolverSpecDir, resolverSpecFileName);
+    createSpecFile(resolverSpecPath, `require 'rails_helper'\n\nRSpec.describe ${baseName} do\nend`);
+
+    // Integration test for GraphQL
+    const requestSpecDir = dirName.replace('/app/graphql', '/spec/requests/graphql').replace('/resolvers', '');
+    const requestSpecPath = path.join(requestSpecDir, fileName.replace('.rb', '_spec.rb'));
+    createSpecFile(requestSpecPath, `require 'rails_helper'\n\nRSpec.describe '/graphql' do\nend`);
+}
+
+function createSpecFile(specFilePath: string, content: string) {
+    if (!fs.existsSync(specFilePath)) {
+        fs.mkdirSync(path.dirname(specFilePath), { recursive: true });
+        fs.writeFileSync(specFilePath, content);
+        vscode.window.showInformationMessage(`RSpec file created: ${specFilePath}`);
+    } else {
+        vscode.window.showInformationMessage('RSpec file already exists.');
+    }
+}
+
+function generateSpecFile(specDir: string, specFileName: string, filePath: any, testType: any) {
+    const specFilePath = path.join(specDir, specFileName);
+    if (!fs.existsSync(specFilePath)) {
+        const fileContents = fs.readFileSync(filePath, 'utf8');
+        const fullClassName = getFullClassName(fileContents);
+        const describeBlock = fullClassName || filePath.split(path.sep).pop().replace('.rb', '');
+        fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock}, ${testType ? `${testType} ` : ''}do\nend`);
+        vscode.window.showInformationMessage(`RSpec file created: ${specFilePath}`);
+    } else {
+        vscode.window.showInformationMessage('RSpec file already exists.');
+    }
 }
 
 function getFullClassName(fileContents: string) {
@@ -71,8 +97,6 @@ function getFullClassName(fileContents: string) {
         const part = match[1] || match[2];
         fullClassName += (fullClassName ? '::' : '') + part;
     }
-
     fullClassName = fullClassName.replace('Controller', '');
-
     return fullClassName;
 }
