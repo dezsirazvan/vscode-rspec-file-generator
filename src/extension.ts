@@ -59,10 +59,12 @@ function handleGraphqlSpecs(filePath: string, dirName: string, fileName: string)
     const resolverSpecPath = path.join(resolverSpecDir, resolverSpecFileName);
     createSpecFile(resolverSpecPath, `require 'rails_helper'\n\nRSpec.describe ${baseName} do\nend`);
 
-    // Integration test for GraphQL
-    const requestSpecDir = dirName.replace('/app/graphql', '/spec/requests/graphql').replace('/resolvers', '');
-    const requestSpecPath = path.join(requestSpecDir, fileName.replace('.rb', '_spec.rb'));
-    createSpecFile(requestSpecPath, `require 'rails_helper'\n\nRSpec.describe '/graphql' do\nend`);
+    if ((dirName.includes('/resolvers') && fileName.includes('query')) || dirName.includes('/mutations')) {
+        // Integration test for GraphQL
+        const requestSpecDir = dirName.replace('/app/graphql', '/spec/requests/graphql').replace('/resolvers', '');
+        const requestSpecPath = path.join(requestSpecDir, fileName.replace('.rb', '_spec.rb'));
+        createSpecFile(requestSpecPath, `require 'rails_helper'\n\nRSpec.describe '/graphql' do\nend`);
+    }
 }
 
 function createSpecFile(specFilePath: string, content: string) {
