@@ -17,19 +17,31 @@ export function activate(context: vscode.ExtensionContext) {
         const filePath = uri.fsPath;
         const fileName = path.basename(filePath);
         const dirName = path.dirname(filePath);
-        let specDir;
-        let specFileName;
-        let specFilePath;
+        let specDir, specFileName, specFilePath, testType;
 
         if (filePath.includes('/app/controllers/')) {
             specDir = dirName.replace('/app/controllers/', '/spec/requests/');
             specFileName = fileName.replace('_controller.rb', '.rb');
-            specFilePath = path.join(specDir, specFileName);
+            testType = 'type: :request';
+        } else if (filePath.includes('/app/jobs/')) {
+            specDir = dirName.replace('/app/jobs/', '/spec/jobs/');
+            specFileName = fileName.replace('.rb', '_spec.rb');
+            testType = 'type: :job';
+        } else if (filePath.includes('/app/services/')) {
+            specDir = dirName.replace('/app/services/', '/spec/services/');
+            specFileName = fileName.replace('.rb', '_spec.rb');
+            testType = '';
+        } else if (filePath.includes('/app/models/')) {
+            specDir = dirName.replace('/app/', '/spec/');
+            specFileName = fileName.replace('.rb', '_spec.rb');
+            testType = 'type: :model';
         } else {
             specDir = dirName.replace('/app/', '/spec/');
             specFileName = fileName.replace('.rb', '_spec.rb');
-            specFilePath = path.join(specDir, specFileName);
-        }
+            testType = '';
+        };
+
+        specFilePath = path.join(specDir, specFileName);
 
         if (!fs.existsSync(specDir)) {
             fs.mkdirSync(specDir, { recursive: true });
@@ -38,11 +50,9 @@ export function activate(context: vscode.ExtensionContext) {
         if (!fs.existsSync(specFilePath)) {
             const fileContents = fs.readFileSync(filePath, 'utf8');
             const fullClassName = getFullClassName(fileContents);
-            const describeBlock = fullClassName ? fullClassName.replace('Controller', '') : fileName.replace('.rb', '').replace('Controller', '');
+            const describeBlock = fullClassName || fileName.replace('.rb', '');
 
-            const testType = filePath.includes('/app/controllers/') ? 'type: :request' : 'type: :model';
-
-            fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock}, ${testType} do\nend`);
+            fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock}, ${testType ? `${testType} ` : ''}do\nend`);
             vscode.window.showInformationMessage(`RSpec file created: ${specFilePath}`);
         } else {
             vscode.window.showInformationMessage('RSpec file already exists.');
@@ -62,5 +72,5 @@ function getFullClassName(fileContents: string) {
         fullClassName += (fullClassName ? '::' : '') + part;
     }
 
-    return fullClassName.replace('Controller', '');
+    return fullClassName;
 }
