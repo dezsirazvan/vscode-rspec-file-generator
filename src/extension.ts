@@ -72,5 +72,7 @@ function getFullClassName(fileContents: string) {
         fullClassName += (fullClassName ? '::' : '') + part;
     }
 
+    fullClassName = fullClassName.replace('Controller', '');
+
     return fullClassName;
 }
