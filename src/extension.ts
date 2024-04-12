@@ -17,9 +17,19 @@ export function activate(context: vscode.ExtensionContext) {
         const filePath = uri.fsPath;
         const fileName = path.basename(filePath);
         const dirName = path.dirname(filePath);
-        const specDir = dirName.replace('/app/', '/spec/');
-        const specFileName = fileName.replace('.rb', '_spec.rb');
-        const specFilePath = path.join(specDir, specFileName);
+        let specDir;
+        let specFileName;
+        let specFilePath;
+
+        if (filePath.includes('/app/controllers/')) {
+            specDir = dirName.replace('/app/controllers/', '/spec/requests/');
+            specFileName = fileName.replace('_controller.rb', '.rb');
+            specFilePath = path.join(specDir, specFileName);
+        } else {
+            specDir = dirName.replace('/app/', '/spec/');
+            specFileName = fileName.replace('.rb', '_spec.rb');
+            specFilePath = path.join(specDir, specFileName);
+        }
 
         if (!fs.existsSync(specDir)) {
             fs.mkdirSync(specDir, { recursive: true });
@@ -28,9 +38,11 @@ export function activate(context: vscode.ExtensionContext) {
         if (!fs.existsSync(specFilePath)) {
             const fileContents = fs.readFileSync(filePath, 'utf8');
             const fullClassName = getFullClassName(fileContents);
-            const describeBlock = fullClassName ? fullClassName : fileName.replace('.rb', '');
+            const describeBlock = fullClassName ? fullClassName.replace('Controller', '') : fileName.replace('.rb', '').replace('Controller', '');
 
-            fs.writeFileSync(specFilePath, `require 'rails_helper'\n\ndescribe '${describeBlock}' do\nend`);
+            const testType = filePath.includes('/app/controllers/') ? 'type: :request' : 'type: :model';
+
+            fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock}, ${testType} do\nend`);
             vscode.window.showInformationMessage(`RSpec file created: ${specFilePath}`);
         } else {
             vscode.window.showInformationMessage('RSpec file already exists.');
@@ -50,5 +62,5 @@ function getFullClassName(fileContents: string) {
         fullClassName += (fullClassName ? '::' : '') + part;
     }
 
-    return fullClassName;
+    return fullClassName.replace('Controller', '');
 }
