@@ -11,6 +11,10 @@
   ],
   "activationEvents": ["onLanguage:ruby"],
   "main": "./out/extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dezsirazvan/vscode-rspec-file-generator"
+  },
   "contributes": {
     "commands": [{
       "command": "extension.generateRSpec",
