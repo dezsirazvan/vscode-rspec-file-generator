@@ -2,7 +2,7 @@
   "name": "rspec-file-generator",
   "displayName": "Rspec File Generator",
   "description": "Automatically generate RSpec test files for Ruby on Rails applications with a simple right-click.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.82.2"
   },
