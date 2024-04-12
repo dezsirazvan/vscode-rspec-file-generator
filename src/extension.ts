@@ -20,15 +20,15 @@ export function activate(context: vscode.ExtensionContext) {
         let specDir, specFileName, specFilePath, testType;
 
         if (filePath.includes('/app/controllers/')) {
-            specDir = dirName.replace('/app/controllers/', '/spec/requests/');
-            specFileName = fileName.replace('_controller.rb', '.rb');
+            specDir = dirName.replace('/app/controllers', '/spec/requests');
+            specFileName = fileName.replace('_controller.rb', '_spec.rb');
             testType = 'type: :request';
         } else if (filePath.includes('/app/jobs/')) {
-            specDir = dirName.replace('/app/jobs/', '/spec/jobs/');
+            specDir = dirName.replace('/app/jobs', '/spec/jobs');
             specFileName = fileName.replace('.rb', '_spec.rb');
             testType = 'type: :job';
         } else if (filePath.includes('/app/services/')) {
-            specDir = dirName.replace('/app/services/', '/spec/services/');
+            specDir = dirName.replace('/app/services', '/spec/services');
             specFileName = fileName.replace('.rb', '_spec.rb');
             testType = '';
         } else if (filePath.includes('/app/models/')) {
