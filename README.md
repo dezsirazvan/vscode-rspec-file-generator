@@ -12,7 +12,7 @@ This extension provides a seamless experience for generating RSpec test files:
 
 For example, here's how you can use the extension in action:
 
-![Generate Rspec](image.jpeg)
+![Generate Rspec](demo.gif)
 
 ## Requirements
 
