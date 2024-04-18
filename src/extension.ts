@@ -22,18 +22,18 @@ export function activate(context: vscode.ExtensionContext) {
         if (filePath.includes('/app/controllers/')) {
             specDir = dirName.replace('/app/controllers', '/spec/requests');
             specFileName = fileName.replace('_controller.rb', '_spec.rb');
-            testType = 'type: :request';
+            // testType = 'type: :request';
         } else if (filePath.includes('/app/jobs/')) {
             specDir = dirName.replace('/app/jobs', '/spec/jobs');
             specFileName = fileName.replace('.rb', '_spec.rb');
-            testType = 'type: :job';
+            // testType = 'type: :job';
         } else if (filePath.includes('/app/services/')) {
             specDir = dirName.replace('/app/services', '/spec/services');
             specFileName = fileName.replace('.rb', '_spec.rb');
         } else if (filePath.includes('/app/models/')) {
             specDir = dirName.replace('/app/models', '/spec/models');
             specFileName = fileName.replace('.rb', '_spec.rb');
-            testType = 'type: :model';
+            // testType = 'type: :model';
         } else if (filePath.includes('/app/graphql/')) {
             handleGraphqlSpecs(filePath, dirName, fileName);
             return; // Early return to prevent further processing
@@ -83,7 +83,8 @@ function generateSpecFile(specDir: string, specFileName: string, filePath: any, 
         const fileContents = fs.readFileSync(filePath, 'utf8');
         const fullClassName = getFullClassName(fileContents);
         const describeBlock = fullClassName || filePath.split(path.sep).pop().replace('.rb', '');
-        fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock} ${testType ? `${testType} ` : ''}do\nend\n`);
+        // fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock} ${testType ? `, ${testType} ` : ''}do\nend\n`);
+        fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock} do\nend\n`);
         vscode.window.showInformationMessage(`RSpec file created: ${specFilePath}`);
     } else {
         vscode.window.showInformationMessage('RSpec file already exists.');

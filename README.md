@@ -32,6 +32,10 @@ Currently, there are no known issues. Should any arise, they will be listed here
 
 ## Release Notes
 
+### 0.0.9
+
+- Removed automatically generated type: (:model, :request, :job)
+
 ### 0.0.8
 
 - Removed unnecessary comma after the class name
