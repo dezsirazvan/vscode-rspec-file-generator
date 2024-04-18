@@ -32,16 +32,21 @@ Currently, there are no known issues. Should any arise, they will be listed here
 
 ## Release Notes
 
-### 1.0.0
+### 0.0.8
+
+- Removed unnecessary comma after the class name
+- Added a new line at the end of the spec file
+
+### 0.0.2
 
 - Initial release of RSpec File Generator.
 - Full functionality for generating RSpec files with context menu integration.
 
-### 1.0.1
+### 0.0.1
 
 - Fixed minor bugs related to file path resolutions.
 
-### 1.1.0
+### 0.0.0
 
 - Added support for custom configurations via extension settings.
 

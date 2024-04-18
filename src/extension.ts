@@ -57,13 +57,13 @@ function handleGraphqlSpecs(filePath: string, dirName: string, fileName: string)
     const resolverSpecDir = dirName.replace('/app/graphql', '/spec/graphql');
     const resolverSpecFileName = fileName.replace('.rb', '_spec.rb');
     const resolverSpecPath = path.join(resolverSpecDir, resolverSpecFileName);
-    createSpecFile(resolverSpecPath, `require 'rails_helper'\n\nRSpec.describe ${baseName} do\nend`);
+    createSpecFile(resolverSpecPath, `require 'rails_helper'\n\nRSpec.describe ${baseName} do\nend\n`);
 
     if ((dirName.includes('/resolvers') && fileName.includes('query')) || dirName.includes('/mutations')) {
         // Integration test for GraphQL
         const requestSpecDir = dirName.replace('/app/graphql', '/spec/requests/graphql').replace('/resolvers', '');
         const requestSpecPath = path.join(requestSpecDir, fileName.replace('.rb', '_spec.rb'));
-        createSpecFile(requestSpecPath, `require 'rails_helper'\n\nRSpec.describe '/graphql' do\nend`);
+        createSpecFile(requestSpecPath, `require 'rails_helper'\n\nRSpec.describe '/graphql' do\nend\n`);
     }
 }
 
@@ -83,7 +83,7 @@ function generateSpecFile(specDir: string, specFileName: string, filePath: any, 
         const fileContents = fs.readFileSync(filePath, 'utf8');
         const fullClassName = getFullClassName(fileContents);
         const describeBlock = fullClassName || filePath.split(path.sep).pop().replace('.rb', '');
-        fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock} ${testType ? `${testType} ` : ''}do\nend`);
+        fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock} ${testType ? `${testType} ` : ''}do\nend\n`);
         vscode.window.showInformationMessage(`RSpec file created: ${specFilePath}`);
     } else {
         vscode.window.showInformationMessage('RSpec file already exists.');
