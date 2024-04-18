@@ -83,7 +83,7 @@ function generateSpecFile(specDir: string, specFileName: string, filePath: any, 
         const fileContents = fs.readFileSync(filePath, 'utf8');
         const fullClassName = getFullClassName(fileContents);
         const describeBlock = fullClassName || filePath.split(path.sep).pop().replace('.rb', '');
-        fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock}, ${testType ? `${testType} ` : ''}do\nend`);
+        fs.writeFileSync(specFilePath, `require 'rails_helper'\n\nRSpec.describe ${describeBlock} ${testType ? `${testType} ` : ''}do\nend`);
         vscode.window.showInformationMessage(`RSpec file created: ${specFilePath}`);
     } else {
         vscode.window.showInformationMessage('RSpec file already exists.');
