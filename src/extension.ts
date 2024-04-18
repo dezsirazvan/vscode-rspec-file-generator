@@ -100,6 +100,6 @@ function getFullClassName(fileContents: string) {
         const part = match[1] || match[2];
         fullClassName += (fullClassName ? '::' : '') + part;
     }
-    fullClassName = fullClassName.replace('Controller', '');
+    // fullClassName = fullClassName.replace('Controller', '');
     return fullClassName;
 }
