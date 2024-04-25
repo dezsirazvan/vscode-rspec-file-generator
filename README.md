@@ -2,6 +2,7 @@
 
 Welcome to the RSpec File Generator extension for Visual Studio Code! This tool is designed to boost the efficiency of Ruby on Rails developers by automating the creation of RSpec test files directly from the VS Code interface with just a right-click.
 
+[VS Code Extension Marketplace link](https://marketplace.visualstudio.com/items?itemName=RazvanDezsi.rspec-file-generator) 
 ## Features
 
 This extension provides a seamless experience for generating RSpec test files:
