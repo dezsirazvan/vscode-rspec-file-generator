@@ -34,6 +34,10 @@ Currently, there are no known issues. Should any arise, they will be listed here
 
 ### 0.0.10
 
+- Fix recursively directory creation
+
+### 0.0.10
+
 - Keep "Controller" in the describe block name
 
 ### 0.0.9
